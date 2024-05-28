@@ -2,13 +2,10 @@ package com.app.proteinjakt.service;
 
 import com.app.proteinjakt.dto.ProteinProduct;
 import com.app.proteinjakt.repository.ProductPriceRepository;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

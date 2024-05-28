@@ -17,6 +17,6 @@ public class ScheduledScraping {
 
     @Scheduled(fixedRate = 3600000)
     public void startScraping(){
-        scrapingService.scrapeAndSavePrices();
+        scrapingService.scrapeGym();
     }
 }

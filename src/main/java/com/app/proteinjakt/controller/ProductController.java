@@ -1,9 +1,8 @@
 package com.app.proteinjakt.controller;
 
-import com.app.proteinjakt.dto.ProductPrice;
+import com.app.proteinjakt.dto.ProteinProduct;
 import com.app.proteinjakt.repository.ProductPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping("/priser")
-    public List<ProductPrice> getAllPrices(){
+    public List<ProteinProduct> getAllPrices(){
         return productPriceRepository.findAll();
     }
 }

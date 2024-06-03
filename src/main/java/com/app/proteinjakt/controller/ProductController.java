@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,14 @@ public class ProductController {
     }
 
     @GetMapping("/priser")
-    public List<ProteinProduct> getAllPrices(){
-        return productPriceRepository.findAll();
+    public List<String> getAllPrices(){
+//        List<ProteinProduct> products = productPriceRepository.findAll();
+        List<String> stringProductName = new ArrayList<>();
+        for (ProteinProduct items : productPriceRepository.findAll()) {
+            stringProductName.add(items.getProductName());
+        }
+        return stringProductName;
     }
+
+
 }

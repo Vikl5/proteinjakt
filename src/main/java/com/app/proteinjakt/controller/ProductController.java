@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 public class ProductController {
-
     private final ProductPriceRepository productPriceRepository;
 
     @Autowired
@@ -30,13 +29,11 @@ public class ProductController {
 
     @GetMapping("/priser")
     public List<String> getAllPrices(){
-//        List<ProteinProduct> products = productPriceRepository.findAll();
         List<String> stringProductName = new ArrayList<>();
         for (ProteinProduct items : productPriceRepository.findAll()) {
             stringProductName.add(items.getProductName());
         }
         return stringProductName;
     }
-
 
 }

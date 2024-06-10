@@ -7,13 +7,12 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBaseScraper implements IScraper{
     private final ProductPriceRepository productPriceRepository;
-
-
     protected abstract String getProductPriceSelectors();
     protected abstract String getProductNameSelectors();
     protected abstract String getProductOnSaleSelectors();
@@ -48,13 +47,8 @@ public abstract class AbstractBaseScraper implements IScraper{
         ProteinProduct proteinProduct = new ProteinProduct();
         proteinProduct.setProductName(name);
         proteinProduct.setWebsite(website);
-        if (price.isEmpty()) {
-            proteinProduct.setPrice(sale);
-        } else {
-            proteinProduct.setPrice(price);
-        }
-        proteinProduct.setScrapedAt(LocalDateTime.now());
+        proteinProduct.setPrice(price.isEmpty() ? sale : price);
+        proteinProduct.setScrapedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         return proteinProduct;
     }
-
 }

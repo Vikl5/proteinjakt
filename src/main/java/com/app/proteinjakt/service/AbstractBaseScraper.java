@@ -37,9 +37,9 @@ public abstract class AbstractBaseScraper implements IScraper{
     }
 
     private ProteinProduct extractDataFromElement(String url, Element prod) {
-            String productNameSelector = prod.getElementsByClass(getProductNameSelectors()).text();
-            String productPriceSelector = prod.getElementsByClass(getProductPriceSelectors()).text();
-            String productOnSaleSelector = prod.getElementsByClass(getProductOnSaleSelectors()).text();
+            String productNameSelector = prod.select(getProductNameSelectors()).text();
+            String productPriceSelector = prod.select(getProductPriceSelectors()).text();
+            String productOnSaleSelector = prod.select(getProductOnSaleSelectors()).text();
             String productUrlSelector = url.concat(prod.select(getProductUrlSelectors()).attr("href"));
             return setProteinProduct(productNameSelector, productPriceSelector, productUrlSelector, productOnSaleSelector);
     }

@@ -28,16 +28,16 @@ public class ScrapingService extends AbstractBaseScraper{
     }
     @Override
     protected String getProductPriceSelectors() {
-        return "price-sales";
+        return "div.price-sales";
     }
     @Override
     protected String getProductNameSelectors() {
-         return "product-tile-name";
+         return "p.product-tile-name";
 
     }
     @Override
     protected String getProductOnSaleSelectors() {
-        return "price-adjusted";
+        return "div.price-adjusted";
     }
     @Override
     protected String getProductUrlSelectors() {

@@ -7,13 +7,12 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBaseScraper implements IScraper{
     private final ProductPriceRepository productPriceRepository;
-
-
     protected abstract String getProductPriceSelectors();
     protected abstract String getProductNameSelectors();
     protected abstract String getProductOnSaleSelectors();
@@ -26,8 +25,7 @@ public abstract class AbstractBaseScraper implements IScraper{
     public void scrape(String url, Elements products) {
         List<ProteinProduct> productInfo = new ArrayList<>();
         for (Element prod : products) {
-            ProteinProduct proteinProduct = extractDataFromElement(url, prod);
-            productInfo.add(proteinProduct);
+            productInfo.addAll(extractDataFromElement(url, prod));
         }
         saveProductsToDatabase(productInfo);
     }
@@ -36,25 +34,33 @@ public abstract class AbstractBaseScraper implements IScraper{
         productPriceRepository.saveAll(productInfo);
     }
 
-    private ProteinProduct extractDataFromElement(String url, Element prod) {
-            String productNameSelector = prod.getElementsByClass(getProductNameSelectors()).text();
-            String productPriceSelector = prod.getElementsByClass(getProductPriceSelectors()).text();
-            String productOnSaleSelector = prod.getElementsByClass(getProductOnSaleSelectors()).text();
-            String productUrlSelector = url.concat(prod.select(getProductUrlSelectors()).attr("href"));
-            return setProteinProduct(productNameSelector, productPriceSelector, productUrlSelector, productOnSaleSelector);
+
+    private List<ProteinProduct> extractDataFromElement(String url, Element prod) {
+        List<String> productNameSelectors = prod.select(getProductNameSelectors()).eachText();
+        List<String> productPriceSelectors = prod.select(getProductPriceSelectors()).eachText();
+        List<String> productOnSaleSelectors = prod.select(getProductOnSaleSelectors()).eachText();
+        List<String> productUrlSelectors = prod.select(getProductUrlSelectors()).eachAttr("href");
+
+        List<ProteinProduct> proteinProducts = new ArrayList<>();
+        //We use the .size() method on productname since every
+        // productname must have a corresponding price and url
+        for (int i = 0; i < productNameSelectors.size(); i++) {
+            String productName = productNameSelectors.get(i);
+            String productPrice = (i < productPriceSelectors.size()) ? productPriceSelectors.get(i) : "";
+            String productOnSale = (i < productOnSaleSelectors.size()) ? productOnSaleSelectors.get(i) : "";
+            String productUrl = (i < productUrlSelectors.size()) ? url.concat(productUrlSelectors.get(i)) : "";
+
+            proteinProducts.add(setProteinProduct(productName, productPrice, productUrl, productOnSale));
+        }
+        return proteinProducts;
     }
 
-    private ProteinProduct setProteinProduct(String name, String price, String website, String sale) {
+     private ProteinProduct setProteinProduct(String name, String price, String website, String sale) {
         ProteinProduct proteinProduct = new ProteinProduct();
         proteinProduct.setProductName(name);
         proteinProduct.setWebsite(website);
-        if (price.isEmpty()) {
-            proteinProduct.setPrice(sale);
-        } else {
-            proteinProduct.setPrice(price);
-        }
-        proteinProduct.setScrapedAt(LocalDateTime.now());
+        proteinProduct.setPrice(price.isEmpty() ? sale : price);
+        proteinProduct.setScrapedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         return proteinProduct;
     }
-
 }

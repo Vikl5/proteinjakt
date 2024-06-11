@@ -1,13 +1,17 @@
 package com.app.proteinjakt.service;
 
 import com.app.proteinjakt.config.Urls;
+import com.app.proteinjakt.dto.ProteinProduct;
 import com.app.proteinjakt.repository.ProductPriceRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.app.proteinjakt.config.Urls.BODY_LAB;
 
@@ -30,12 +34,12 @@ public class BodylabScraper extends AbstractBaseScraper{
 
     @Override
     protected String getProductPriceSelectors() {
-        return "span.price";
+        return "span[itemprop=price]";
     }
 
     @Override
     protected String getProductNameSelectors() {
-        return "div.name > a";
+        return "div.name";
     }
 
     @Override

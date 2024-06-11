@@ -8,7 +8,7 @@ import java.util.HashMap;
 @Getter
 public enum Urls {
     GYM_GROSSISTEN("https://www.gymgrossisten.no/kosttilskudd/proteinpulver", "product-tile"),
-    BODY_LAB("https://www.bodylab.no/shop/proteinpulver-84s1.html", "container small");
+    BODY_LAB("https://www.bodylab.no/shop/proteinpulver-84s1.html", "ProductList_Custom_UL");
 
     private final String url;
     private final String htmlTag;
